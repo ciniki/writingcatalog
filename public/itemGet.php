@@ -125,14 +125,14 @@ function ciniki_writingcatalog_get($ciniki) {
 	//
 	// Get the categories for the item
 	//
-	if( ($ciniki['business']['modules']['ciniki.writingcatalog']['flags']&0x10) > 0 ) {
+	if( ($ciniki['business']['modules']['ciniki.writingcatalog']['flags']&0x04) > 0 ) {
 		$strsql = "SELECT tag_type, tag_name AS lists "
-			. "FROM ciniki_event_tags "
+			. "FROM ciniki_writingcatalog_tags "
 			. "WHERE writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
 			. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 			. "ORDER BY tag_type, tag_name "
 			. "";
-		$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.events', array(
+		$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.writingcatalog', array(
 			array('container'=>'tags', 'fname'=>'tag_type', 'name'=>'tags',
 				'fields'=>array('tag_type', 'lists'), 'dlists'=>array('lists'=>'::')),
 			));
@@ -142,7 +142,7 @@ function ciniki_writingcatalog_get($ciniki) {
 		if( isset($rc['tags']) ) {
 			foreach($rc['tags'] as $tags) {
 				if( $tags['tags']['tag_type'] == 10 ) {
-					$event['categories'] = $tags['tags']['lists'];
+					$item['categories'] = $tags['tags']['lists'];
 				}
 			}
 		}
@@ -232,7 +232,7 @@ function ciniki_writingcatalog_get($ciniki) {
 	// Check if all tags should be returned
 	//
 	$rsp['categories'] = array();
-	if( ($ciniki['business']['modules']['ciniki.writingcatalog']['flags']&0x10) > 0
+	if( ($ciniki['business']['modules']['ciniki.writingcatalog']['flags']&0x04) > 0
 		&& isset($args['categories']) && $args['categories'] == 'yes' 
 		) {
 		//

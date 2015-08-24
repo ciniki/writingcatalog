@@ -11,6 +11,9 @@
 // -------
 //
 function ciniki_writingcatalog_flags($ciniki, $modules) {
+	//
+	// The flags should be kept the same as art catalog incase modules should be merged in the future
+	//
 	$flags = array(
 		// 0x01
 //		array('flag'=>array('bit'=>'1', 'name'=>'Lists')),

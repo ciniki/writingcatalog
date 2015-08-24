@@ -94,6 +94,6 @@ create table ciniki_writingcatalog (
 	primary key (id),
 	unique index (permalink, business_id),
 	index sync (business_id, uuid, date_added),
-	index (category)
+	index (category),
 	index (year, month, day)
 ) ENGINE='InnoDB', COMMENT='v1.01';
