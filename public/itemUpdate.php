@@ -2,14 +2,14 @@
 //
 // Description
 // ===========
-// This method updates one or more elements of an existing item in the art catalog.
+// This method updates one or more elements of an existing item in the writing catalog.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
 // business_id:		The ID of the business to the item is a part of.
-// writingcatalog_id:	The ID of the item in the art catalog.
+// writingcatalog_id:	The ID of the item in the writing catalog.
 //
 // Returns
 // -------
@@ -23,19 +23,17 @@ function ciniki_writingcatalog_itemUpdate(&$ciniki) {
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
         'writingcatalog_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Item'), 
-		'type'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Type'),
-		'image_id'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Image'),
-        'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Web Flags'), 
         'title'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Title'), 
+        'subtitle'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Subtitle'), 
+		'type'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Type'),
+        'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Web Flags'), 
+		'image_id'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Image'),
         'catalog_number'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Catalog Number'), 
-        'category'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Category'),
         'year'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Year'), 
         'month'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Month'), 
         'day'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Day'), 
         'synopsis'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Synopsis'), 
         'description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'), 
-        'inspiration'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Inspiration'), 
-        'awards'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Awards'), 
         'notes'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Notes'),
 		'categories'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Categories'),
         )); 
@@ -60,7 +58,7 @@ function ciniki_writingcatalog_itemUpdate(&$ciniki) {
 		//
 		// Make sure the permalink is unique
 		//
-		$strsql = "SELECT id, name, permalink "
+		$strsql = "SELECT id, title, permalink "
 			. "FROM ciniki_writingcatalog "
 			. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 			. "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
@@ -78,7 +76,7 @@ function ciniki_writingcatalog_itemUpdate(&$ciniki) {
 	//
 	// Get the existing information
 	//
-	$strsql = "SELECT id, name, category, permalink "
+	$strsql = "SELECT id, title, permalink "
 		. "FROM ciniki_writingcatalog "
 		. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 		. "AND id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
@@ -142,12 +140,6 @@ function ciniki_writingcatalog_itemUpdate(&$ciniki) {
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
 	ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'writingcatalog');
-
-	// Refresh facebook cache if image was updated
-//	if( isset($args['image_id']) ) {
-//		$ciniki['fbrefreshqueue'][] = array('business_id'=>$args['business_id'], 
-//			'url'=>'/gallery/category/' . urlencode(isset($args['category'])?$args['category']:$item['category']) . '/' . (isset($args['permalink'])?$args['permalink']:$item['permalink']));
-//	}
 
 	return array('stat'=>'ok');
 }

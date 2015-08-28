@@ -10,7 +10,7 @@
 // -------
 // <rsp stat='ok' id='34' />
 //
-function ciniki_writingcatalog_imageAdd(&$ciniki) {
+function ciniki_writingcatalog_contentAdd(&$ciniki) {
     //  
     // Find all the required and optional arguments
     //  
@@ -18,12 +18,12 @@ function ciniki_writingcatalog_imageAdd(&$ciniki) {
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
 		'writingcatalog_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Item'),
-        'name'=>array('required'=>'no', 'default'=>'', 'blank'=>'yes', 'name'=>'Title'), 
-		'sequence'=>array('required'=>'no', 'default'=>'0', 'blank'=>'no', 'name'=>'Sequence'),
-        'permalink'=>array('required'=>'no', 'default'=>'', 'blank'=>'yes', 'name'=>'Permalink'), 
-        'webflags'=>array('required'=>'no', 'default'=>'0', 'blank'=>'yes', 'name'=>'Website Flags'), 
-		'image_id'=>array('required'=>'yes', 'blank'=>'yes', 'name'=>'Image'),
-        'description'=>array('required'=>'no', 'default'=>'', 'blank'=>'yes', 'name'=>'Description'), 
+        'title'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Title'), 
+        'permalink'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Permalink'), 
+        'content_type'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Type'), 
+		'sequence'=>array('required'=>'no', 'default'=>'1', 'blank'=>'no', 'name'=>'Sequence'),
+		'image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Image'),
+        'content'=>array('required'=>'no', 'default'=>'', 'blank'=>'yes', 'name'=>'Content'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -35,7 +35,7 @@ function ciniki_writingcatalog_imageAdd(&$ciniki) {
     // check permission to run this function for this business
     //  
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'writingcatalog', 'private', 'checkAccess');
-    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.imageAdd'); 
+    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.contentAdd'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -53,18 +53,16 @@ function ciniki_writingcatalog_imageAdd(&$ciniki) {
 	//
 	// Determine the permalink
 	//
-	if( !isset($args['permalink']) || $args['permalink'] == '' ) {
-		if( isset($args['name']) && $args['name'] != '' ) {
-			$args['permalink'] = preg_replace('/ /', '-', preg_replace('/[^a-z0-9 ]/', '', strtolower($args['name'])));
-		} else {
-			$args['permalink'] = preg_replace('/ /', '-', preg_replace('/[^a-z0-9 ]/', '', strtolower($args['uuid'])));
-		}
+	if( $args['content_type'] == '20' && (!isset($args['permalink']) || $args['permalink'] == '') ) {
+		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
+		$args['permalink'] = ciniki_core_makePermalink($ciniki, $args['title']);
 	}
 
 	//
 	// Check the permalink doesn't already exist for this item in the writingcatalog
 	//
-	$strsql = "SELECT id, name, permalink FROM ciniki_writingcatalog_images "
+	$strsql = "SELECT id, title, permalink "
+		. "FROM ciniki_writingcatalog_content "
 		. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 		. "AND writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
 		. "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
@@ -74,17 +72,17 @@ function ciniki_writingcatalog_imageAdd(&$ciniki) {
 		return $rc;
 	}
 	if( $rc['num_rows'] > 0 ) {
-		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2450', 'msg'=>'You already have an image with this name, please choose another name'));
+		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2497', 'msg'=>'You already have an image with this name, please choose another name'));
 	}
 
 	if( $args['writingcatalog_id'] <= 0 ) {
-		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2451', 'msg'=>'No writingcatalog specified'));
+		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2498', 'msg'=>'No writingcatalog specified'));
 	}
 
 	//
 	// Add the image
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
-	return ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.writingcatalog.image', $args, 0x07);
+	return ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.writingcatalog.content', $args, 0x07);
 }
 ?>

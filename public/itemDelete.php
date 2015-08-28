@@ -2,7 +2,7 @@
 //
 // Description
 // ===========
-// This method will remove an item from the art catalog.  All information
+// This method will remove an item from the writing catalog.  All information
 // will be removed, so be sure you want it deleted.
 //
 // Arguments
@@ -58,22 +58,22 @@ function ciniki_writingcatalog_itemDelete(&$ciniki) {
 	$uuid = $rc['writingcatalog']['uuid'];
 
 	//
-	// Check if any products still exist
+	// FIXME: Check if any products still exist **Future**
 	//
-	$strsql = "SELECT id, uuid "
-		. "FROM ciniki_writingcatalog_products "
-		. "WHERE writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
-		. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
-		. "";
-	$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.writingcatalog', 'product');
-	if( $rc['stat'] != 'ok' ) {
-		ciniki_core_dbTransactionRollback($ciniki, 'ciniki.writingcatalog');
-		return $rc;
-	}
-	if( isset($rc['rows']) && count($rc['rows']) > 0 ) {
-		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2458', 'msg'=>'You must remove all products for this item first.'));
-	}
-
+//	$strsql = "SELECT id, uuid "
+//		. "FROM ciniki_writingcatalog_products "
+//		. "WHERE writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
+//		. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+//		. "";
+//	$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.writingcatalog', 'product');
+//	if( $rc['stat'] != 'ok' ) {
+//		ciniki_core_dbTransactionRollback($ciniki, 'ciniki.writingcatalog');
+//		return $rc;
+//	}
+//	if( isset($rc['rows']) && count($rc['rows']) > 0 ) {
+//		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2458', 'msg'=>'You must remove all products for this item first.'));
+//	}
+//
 	//
 	// Check if writingcatalog item is used anywhere
 	//
@@ -114,7 +114,8 @@ function ciniki_writingcatalog_itemDelete(&$ciniki) {
 	//
 	// Remove any additional images
 	//
-	$strsql = "SELECT id, uuid, image_id FROM ciniki_writingcatalog_images "
+	$strsql = "SELECT id, uuid, image_id "
+		. "FROM ciniki_writingcatalog_images "
 		. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 		. "AND writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
 		. "";
@@ -133,6 +134,42 @@ function ciniki_writingcatalog_itemDelete(&$ciniki) {
 				return $rc;
 			}
 		}
+	}
+
+	//
+	// Remove any additional content
+	//
+	$strsql = "SELECT id, uuid "
+		. "FROM ciniki_writingcatalog_content "
+		. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+		. "AND writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
+		. "";
+	$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.writingcatalog', 'image');
+	if( $rc['stat'] != 'ok' ) {
+		ciniki_core_dbTransactionRollback($ciniki, 'ciniki.writingcatalog');
+		return $rc;
+	}
+	if( isset($rc['rows']) ) {
+		$content = $rc['rows'];
+		foreach($content as $rid => $row) {
+			$rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.writingcatalog.content',
+				$row['id'], $row['uuid'], 0x04);
+			if( $rc['stat'] != 'ok' ) {
+				ciniki_core_dbTransactionRollback($ciniki, 'ciniki.writingcatalog');
+				return $rc;
+			}
+		}
+	}
+
+	//
+	// Remove any tags
+	//
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsDelete');
+	$rc = ciniki_core_tagsDelete($ciniki, 'ciniki.writingcatalog', 'tag', $args['business_id'], 
+		'ciniki_writingcatalog_tags', 'ciniki_writingcatalog_history', 'writingcatalog_id', $args['writingcatalog_id']);
+	if( $rc['stat'] != 'ok' ) {
+		ciniki_core_dbTransactionRollback($ciniki, 'ciniki.writingcatalog');
+		return $rc;
 	}
 
 	//

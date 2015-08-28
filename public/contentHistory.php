@@ -8,7 +8,7 @@
 // api_key:
 // auth_token:
 // business_id:			The ID of the business to get the details for.
-// writingcatalog_image_id:	The ID of the item in the art catalog to get the history for.
+// content_id:			The ID of the content in the writing catalog to get the history for.
 // field:				The field to get the history for. This can be any of the 
 //						elements returned by the ciniki.writingcatalog.get method.
 //
@@ -19,14 +19,14 @@
 //	...
 // </history>
 //
-function ciniki_writingcatalog_productHistory($ciniki) {
+function ciniki_writingcatalog_contentHistory($ciniki) {
 	//
 	// Find all the required and optional arguments
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
 	$rc = ciniki_core_prepareArgs($ciniki, 'no', array(
 		'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
-		'product_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Product'), 
+		'content_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Content'), 
 		'field'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Field'), 
 		));
 	if( $rc['stat'] != 'ok' ) {
@@ -38,12 +38,12 @@ function ciniki_writingcatalog_productHistory($ciniki) {
 	// Check access to business_id as owner, or sys admin
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'writingcatalog', 'private', 'checkAccess');
-	$rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.productHistory');
+	$rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.contentHistory');
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
 	}
 
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbGetModuleHistory');
-	return ciniki_core_dbGetModuleHistory($ciniki, 'ciniki.writingcatalog', 'ciniki_writingcatalog_history', $args['business_id'], 'ciniki_writingcatalog_products', $args['product_id'], $args['field']);
+	return ciniki_core_dbGetModuleHistory($ciniki, 'ciniki.writingcatalog', 'ciniki_writingcatalog_history', $args['business_id'], 'ciniki_writingcatalog_content', $args['content_id'], $args['field']);
 }
 ?>

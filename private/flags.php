@@ -25,6 +25,12 @@ function ciniki_writingcatalog_flags($ciniki, $modules) {
 //		array('flag'=>array('bit'=>'6', 'name'=>'')),
 //		array('flag'=>array('bit'=>'7', 'name'=>'')),
 //		array('flag'=>array('bit'=>'8', 'name'=>'')),
+		// 0x0100
+		array('flag'=>array('bit'=>'9', 'name'=>'Reviews')),
+		array('flag'=>array('bit'=>'10', 'name'=>'Samples')),
+		array('flag'=>array('bit'=>'11', 'name'=>'Ordering')),
+//		array('flag'=>array('bit'=>'12', 'name'=>'')),
+
 		);
 
 	return array('stat'=>'ok', 'flags'=>$flags);
