@@ -69,7 +69,7 @@ function ciniki_writingcatalog_objects($ciniki) {
 		'fields'=>array(
 			'writingcatalog_id'=>array('ref'=>'ciniki.writingcatalog.item'),
 			'title'=>array(),
-			'permalink'=>array(),
+			'permalink'=>array('default'=>''),
 			'content_type'=>array('default'=>'0'),
 			'sequence'=>array('default'=>'0'),
 			'image_id'=>array('default'=>'0'),

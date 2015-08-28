@@ -42,6 +42,5 @@ create table ciniki_writingcatalog_content (
 	date_added datetime not null,
 	last_updated datetime not null,
 	primary key (id),
-	unique index (writingcatalog_id, permalink),
 	index sync (business_id, uuid, last_updated)
 ) ENGINE='InnoDB', COMMENT='v1.01';

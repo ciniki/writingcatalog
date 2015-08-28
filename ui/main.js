@@ -640,7 +640,9 @@ function ciniki_writingcatalog_main() {
 							M.ciniki_writingcatalog_main.content.close();
 						}
 					});
-			} 
+			} else {
+				this.content.close();
+			}
 		} else {
 			var c = this.content.serializeForm('yes');
 			c += 'writingcatalog_id=' + this.content.writingcatalog_id + '&';
