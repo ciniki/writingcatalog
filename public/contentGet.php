@@ -51,6 +51,9 @@ function ciniki_writingcatalog_contentGet($ciniki) {
 			'sequence'=>1,
 			'image_id'=>'0',
 			'content'=>'',
+			'paypal_business'=>'',
+			'paypal_price'=>'',
+			'paypal_currency'=>'CAD',
 			);
 		$strsql = "SELECT MAX(sequence)+1 AS next_sequence "
 			. "FROM ciniki_writingcatalog_content "
@@ -75,7 +78,10 @@ function ciniki_writingcatalog_contentGet($ciniki) {
 			. "ciniki_writingcatalog_content.content_type, "
 			. "ciniki_writingcatalog_content.sequence, "
 			. "ciniki_writingcatalog_content.image_id, "
-			. "ciniki_writingcatalog_content.content "
+			. "ciniki_writingcatalog_content.content, "
+			. "ciniki_writingcatalog_content.paypal_business, "
+			. "ciniki_writingcatalog_content.paypal_price, "
+			. "ciniki_writingcatalog_content.paypal_currency "
 			. "FROM ciniki_writingcatalog_content "
 			. "WHERE ciniki_writingcatalog_content.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 			. "AND ciniki_writingcatalog_content.id = '" . ciniki_core_dbQuote($ciniki, $args['content_id']) . "' "
@@ -83,7 +89,8 @@ function ciniki_writingcatalog_contentGet($ciniki) {
 		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
 		$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.writingcatalog', array(
 			array('container'=>'content', 'fname'=>'id', 'name'=>'content',
-				'fields'=>array('id', 'title', 'permalink', 'content_type', 'sequence', 'image_id', 'content')),
+				'fields'=>array('id', 'title', 'permalink', 'content_type', 'sequence', 'image_id', 'content',
+					'paypal_business', 'paypal_price', 'paypal_currency')),
 			));
 		if( $rc['stat'] != 'ok' ) {
 			return $rc;

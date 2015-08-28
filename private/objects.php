@@ -74,6 +74,9 @@ function ciniki_writingcatalog_objects($ciniki) {
 			'sequence'=>array('default'=>'0'),
 			'image_id'=>array('default'=>'0'),
 			'content'=>array('default'=>''),
+			'paypal_business'=>array('default'=>''),
+			'paypal_price'=>array('default'=>''),
+			'paypal_currency'=>array('default'=>''),
 			),
 		'history_table'=>'ciniki_writingcatalog_history',
 		);

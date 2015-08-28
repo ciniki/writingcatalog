@@ -27,6 +27,9 @@ function ciniki_writingcatalog_contentUpdate(&$ciniki) {
         'sequence'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Sequence'), 
 		'image_id'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Image'),
         'content'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Content'), 
+        'paypal_business'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Paypal Business'), 
+        'paypal_price'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Paypal Price'), 
+        'paypal_currency'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Paypal Currency'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;

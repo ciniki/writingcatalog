@@ -58,7 +58,8 @@ function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $business_
 	//
 	// Get the extra content for the book
 	//
-	$strsql = "SELECT id, title, permalink, content_type, image_id, content "
+	$strsql = "SELECT id, title, permalink, content_type, image_id, content, "
+		. "paypal_business, FORMAT(paypal_price, 2) AS paypal_price, paypal_currency "
 		. "FROM ciniki_writingcatalog_content "
 		. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 		. "AND ciniki_writingcatalog_content.writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $item['id']) . "' "
@@ -68,7 +69,8 @@ function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $business_
 		array('container'=>'content_types', 'fname'=>'content_type',
 			'fields'=>array('content_type')),
 		array('container'=>'content', 'fname'=>'id', 
-			'fields'=>array('id', 'title', 'permalink', 'content_type', 'image_id', 'content')),
+			'fields'=>array('id', 'title', 'permalink', 'content_type', 'image_id', 'content', 
+				'paypal_business', 'paypal_price', 'paypal_currency')),
 	));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;

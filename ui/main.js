@@ -394,6 +394,11 @@ function ciniki_writingcatalog_main() {
 			'_content':{'label':'Content', 'type':'simpleform', 'fields':{
 				'content':{'label':'', 'type':'textarea', 'size':'large', 'hidelabel':'yes'},
 				}},
+			'paypal':{'label':'Paypal', 'type':'simpleform', 'fields':{
+				'paypal_business':{'label':'Business Email', 'type':'text'},
+				'paypal_price':{'label':'Price', 'type':'text', 'size':'small'},
+				'paypal_currency':{'label':'Currency', 'type':'toggle', 'default':'CAD', 'toggles':{'CAD':'CAD', 'USD':'USD'}},
+				}},
 			'_buttons':{'label':'', 'buttons':{
 				'save':{'label':'Save', 'fn':'M.ciniki_writingcatalog_main.contentSave();'},
 				'delete':{'label':'Delete', 'fn':'M.ciniki_writingcatalog_main.contentDelete();'},
