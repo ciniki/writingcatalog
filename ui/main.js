@@ -651,7 +651,6 @@ function ciniki_writingcatalog_main() {
 		} else {
 			var c = this.content.serializeForm('yes');
 			c += 'writingcatalog_id=' + this.content.writingcatalog_id + '&';
-			console.log(c);
 			M.api.postJSONCb('ciniki.writingcatalog.contentAdd', {'business_id':M.curBusinessID}, c, function(rsp) {
 				if( rsp.stat != 'ok' ) {
 					M.api.err(rsp);
