@@ -329,7 +329,7 @@ function ciniki_writingcatalog_main() {
 			this.removeLiveSearch(s, fid);
 		};
 		this.edit.fieldHistoryArgs = function(s, i) {
-			return {'method':'ciniki.writingcatalog.getHistory', 
+			return {'method':'ciniki.writingcatalog.itemHistory', 
 				'args':{'business_id':M.curBusinessID, 'writingcatalog_id':this.writingcatalog_id, 'field':i}};
 		}
 		this.edit.addDropImage = function(iid) {
