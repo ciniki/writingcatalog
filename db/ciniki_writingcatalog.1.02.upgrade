@@ -1,0 +1,7 @@
+#
+# This file will upgrade the database table ciniki_artcatalog to version 1.02.
+#
+ALTER TABLE ciniki_writingcatalog ADD COLUMN content varchar(20000) not null AFTER description;
+ALTER TABLE ciniki_writingcatalog ADD COLUMN inspiration varchar(6000) not null AFTER content;
+ALTER TABLE ciniki_writingcatalog ADD COLUMN awards varchar(6000) not null AFTER inspiration;
+ALTER TABLE ciniki_writingcatalog COMMENT='v1.02';

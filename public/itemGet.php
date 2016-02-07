@@ -106,6 +106,9 @@ function ciniki_writingcatalog_itemGet($ciniki) {
 			. "webflags, catalog_number, year, month, day, "
 			. "ciniki_writingcatalog.synopsis, "
 			. "ciniki_writingcatalog.description, "
+			. "ciniki_writingcatalog.content, "
+			. "ciniki_writingcatalog.inspiration, "
+			. "ciniki_writingcatalog.awards, "
 			. "ciniki_writingcatalog.notes "
 			. "FROM ciniki_writingcatalog "
 			. "WHERE ciniki_writingcatalog.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
@@ -117,7 +120,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
 			array('container'=>'items', 'fname'=>'id', 'name'=>'item',
 				'fields'=>array('id', 'title', 'subtitle', 'permalink', 'image_id', 'type', 'type_text',
 					'webflags', 'catalog_number', 'year', 'month', 'day', 
-					'website', 'synopsis', 'description', 'notes'),
+					'website', 'synopsis', 'description', 'content', 'inspiration', 'awards', 'notes'),
 				'maps'=>array('type_text'=>$maps['item']['type'])),
 			));
 		if( $rc['stat'] != 'ok' ) {

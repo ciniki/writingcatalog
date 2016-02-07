@@ -22,8 +22,9 @@
 #	
 #					0 - unknown
 #					30 - Book
-#					31 - Short Story **future**
-#					32 - Article **future**
+#					40 - Short Story **future**
+#					50 - Article **future**
+#                   60 - Poetry
 #
 # webflags:			The flags for displaying the image on the website
 #
@@ -56,11 +57,16 @@
 #
 # description:		The description of the item, which is public on the website.
 #
+# content:          The content for the item. This is for smaller items like Poetry.
+#
+# inspiration:      The inspiration for the item.
+#
+# awards:           Any awards won by the item.
+#
 # notes:			Any private notes for the item.
 #
 # date_added:       The UTC date and time the thread was added.
 # last_updated:     The UTC date and time the thread was last updated.
-#
 #
 create table ciniki_writingcatalog (
 	id int not null auto_increment,
@@ -78,6 +84,9 @@ create table ciniki_writingcatalog (
 	day tinyint unsigned not null,
 	synopsis varchar(6000) not null,
 	description varchar(10000) not null,
+    content varchar(20000) not null,
+    inspiration varchar(4000) not null,
+    awards varchar(4000) not null,
 	notes varchar(6000) not null,
 	date_added datetime not null,
 	last_updated datetime not null,
@@ -85,4 +94,4 @@ create table ciniki_writingcatalog (
 	unique index (permalink, business_id),
 	index sync (business_id, uuid, date_added),
 	index (year, month, day)
-) ENGINE='InnoDB', COMMENT='v1.01';
+) ENGINE='InnoDB', COMMENT='v1.02';

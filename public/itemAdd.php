@@ -33,8 +33,11 @@ function ciniki_writingcatalog_itemAdd(&$ciniki) {
         'year'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Year'), 
         'month'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Month'), 
         'day'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Day'), 
-        'synopsis'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Description'), 
+        'synopsis'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Synopsis'), 
         'description'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Description'), 
+        'content'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Content'), 
+        'inspiration'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Inspiration'), 
+        'awards'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Awards'), 
         'notes'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Notes'), 
 		'categories'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Categories'),
         )); 

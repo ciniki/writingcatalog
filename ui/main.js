@@ -131,9 +131,12 @@ function ciniki_writingcatalog_main() {
 				'categories':{'label':'Categories', 'visible':'no'},
 				'website':{'label':'Website'},
 			}},
-			'synopsis':{'label':'Synopsis', 'type':'htmlcontent'},
-			'description':{'label':'Description', 'type':'htmlcontent'},
-			'notes':{'label':'Notes', 'type':'htmlcontent'},
+			'synopsis':{'label':'Synopsis', 'type':'htmlcontent', 'visible':function() {return M.ciniki_writingcatalog_main.item.data.synopsis!=''?'yes':'no';}},
+			'description':{'label':'Description', 'type':'htmlcontent', 'visible':function() {return M.ciniki_writingcatalog_main.item.data.description!=''?'yes':'no';}},
+			'content':{'label':'', 'type':'htmlcontent', 'visible':function() {return M.ciniki_writingcatalog_main.item.data.content!=''?'yes':'no';}},
+			'inspiration':{'label':'Inspiration', 'type':'htmlcontent', 'visible':function() {return M.ciniki_writingcatalog_main.item.data.inspiration!=''?'yes':'no';}},
+			'awards':{'label':'Awards', 'type':'htmlcontent', 'visible':function() {return M.ciniki_writingcatalog_main.item.data.awards!=''?'yes':'no';}},
+			'notes':{'label':'Notes', 'type':'htmlcontent', 'visible':function() {return M.ciniki_writingcatalog_main.item.data.notes!=''?'yes':'no';}},
 			'reviews':{'label':'Reviews', 'visible':'no', 'type':'simplegrid', 'num_cols':1,
 				'addTxt':'Add Review',
 				'addFn':'M.ciniki_writingcatalog_main.contentEdit(\'M.ciniki_writingcatalog_main.itemShow();\',\'0\',\'10\',M.ciniki_writingcatalog_main.item.writingcatalog_id);',
@@ -157,7 +160,7 @@ function ciniki_writingcatalog_main() {
 			}},
 		};
 		this.item.sectionData = function(s) {
-			if( s == 'synopsis' || s == 'description' || s == 'notes' ) {
+			if( s == 'synopsis' || s == 'description' || s == 'content' || s == 'inspiration' || s == 'awards' || s == 'notes' ) {
 				return this.data[s].replace(/\n/g, '<br/>');
 			}
 			if( s == 'info' ) { return this.sections[s].list; }
@@ -263,8 +266,9 @@ function ciniki_writingcatalog_main() {
 		this.edit.formtabs = {'label':'', 'field':'type', 
 			'tabs':{
 				'book':{'label':'Book', 'field_id':30},
-				'shortstory':{'label':'Short Story', 'field_id':31},
-				'article':{'label':'Article', 'field_id':32},
+//				'shortstory':{'label':'Short Story', 'field_id':31},
+//				'article':{'label':'Article', 'field_id':32},
+				'poetry':{'label':'Poetry', 'field_id':60},
 			}};
 		this.edit.forms.book = {
 			'_image':{'label':'Image', 'aside':'yes', 'type':'imageform', 'fields':{
@@ -279,13 +283,53 @@ function ciniki_writingcatalog_main() {
 				'day':{'label':'Day', 'type':'select', 'options':this.dayOptions},
 				}},
 			'_categories':{'label':'Categories', 'aside':'yes', 'active':'no', 'type':'simpleform', 'fields':{
-				'categories':{'label':'', 'active':'no', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'New Category'},
+				'categories':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'New Category'},
 				}},
 			'_synopsis':{'label':'Synopsis', 'type':'simpleform', 'fields':{
 				'synopsis':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
 				}},
 			'_description':{'label':'Description', 'type':'simpleform', 'fields':{
 				'description':{'label':'', 'type':'textarea', 'size':'medium', 'hidelabel':'yes'},
+				}},
+			'_notes':{'label':'Notes', 'type':'simpleform', 'fields':{
+				'notes':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
+				}},
+			'_website':{'label':'Website Information', 'type':'simpleform', 'fields':{
+				'webflags_1':{'label':'Visible', 'type':'flagtoggle', 'field':'webflags', 'bit':0x01, 'default':'on'},
+				}},
+			'_buttons':{'label':'', 'buttons':{
+				'save':{'label':'Save', 'fn':'M.ciniki_writingcatalog_main.itemSave();'},
+				}},
+		};
+		this.edit.forms.poetry = {
+			'_image':{'label':'Image', 'aside':'yes', 'type':'imageform', 'fields':{
+				'image_id':{'label':'', 'type':'image_id', 'hidelabel':'yes', 'controls':'all', 'history':'no'},
+				}},
+			'info':{'label':'Catalog Information', 'aside':'yes', 'type':'simpleform', 'fields':{
+				'title':{'label':'Title', 'type':'text', },
+				'subtitle':{'label':'Subtitle', 'type':'text', },
+				'catalog_number':{'label':'Number', 'type':'text', 'size':'small', },
+				'year':{'label':'Year', 'type':'text', 'size':'small', 'livesearch':'yes', 'livesearchempty':'yes'},
+				'month':{'label':'Month', 'type':'select', 'options':this.monthOptions},
+				'day':{'label':'Day', 'type':'select', 'options':this.dayOptions},
+				}},
+			'_categories':{'label':'Categories', 'aside':'yes', 'active':'no', 'type':'simpleform', 'fields':{
+				'categories':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'New Category'},
+				}},
+			'_synopsis':{'label':'Synopsis', 'type':'simpleform', 'fields':{
+				'synopsis':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
+				}},
+			'_description':{'label':'Description', 'type':'simpleform', 'fields':{
+				'description':{'label':'', 'type':'textarea', 'size':'medium', 'hidelabel':'yes'},
+				}},
+			'_content':{'label':'Poem', 'type':'simpleform', 'fields':{
+				'content':{'label':'', 'type':'textarea', 'size':'large', 'hidelabel':'yes'},
+				}},
+			'_inspiration':{'label':'Inspiration', 'type':'simpleform', 'fields':{
+				'inspiration':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
+				}},
+			'_awards':{'label':'Awards', 'type':'simpleform', 'fields':{
+				'awards':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
 				}},
 			'_notes':{'label':'Notes', 'type':'simpleform', 'fields':{
 				'notes':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
@@ -503,8 +547,8 @@ function ciniki_writingcatalog_main() {
 				var p = M.ciniki_writingcatalog_main.item;
 				p.reset();
 				p.data = rsp.item;
-				p.sections.description.visible=(rsp.item.description!=null&&rsp.item.description!='')?'yes':'no';
-				p.sections.notes.visible=(rsp.item.notes!=null&&rsp.item.notes!='')?'yes':'no';
+//				p.sections.description.visible=(rsp.item.description!=null&&rsp.item.description!='')?'yes':'no';
+//				p.sections.notes.visible=(rsp.item.notes!=null&&rsp.item.notes!='')?'yes':'no';
 
 				// Setup next/prev buttons
 				p.prev_item_id = 0;
@@ -552,10 +596,13 @@ function ciniki_writingcatalog_main() {
 			}
 			var p = M.ciniki_writingcatalog_main.edit;
 			p.formtab = null;
-			var tags = [];
-			for(i in rsp.tags) {
-				tags.push(rsp.tags[i].tag.name);
+			var categories = [];
+			for(i in rsp.categories) {
+				categories.push(rsp.categories[i].tag.name);
 			}
+            for(i in p.forms) {
+                p.forms[i]._categories.fields.categories.tags = categories;
+            }
 			p.data = rsp.item;
 			p.refresh();
 			p.show(cb);

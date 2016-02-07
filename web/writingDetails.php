@@ -35,7 +35,10 @@ function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $business_
 		. "ciniki_writingcatalog.webflags, "
 		. "ciniki_writingcatalog.image_id, "
 		. "ciniki_writingcatalog.synopsis, "
-		. "ciniki_writingcatalog.description "
+		. "ciniki_writingcatalog.description, "
+		. "ciniki_writingcatalog.content, "
+		. "ciniki_writingcatalog.inspiration, "
+		. "ciniki_writingcatalog.awards "
 		. "FROM ciniki_writingcatalog "
 		. "WHERE ciniki_writingcatalog.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 		. "AND ciniki_writingcatalog.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
@@ -44,7 +47,7 @@ function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $business_
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.writingcatalog', array(
 		array('container'=>'items', 'fname'=>'id',
-			'fields'=>array('id', 'title', 'subtitle', 'type', 'type_text', 'permalink', 'image_id', 'synopsis', 'description'),
+			'fields'=>array('id', 'title', 'subtitle', 'type', 'type_text', 'permalink', 'image_id', 'synopsis', 'description', 'content', 'inspiration', 'awards'),
 			),
 		));
 	if( $rc['stat'] != 'ok' ) {

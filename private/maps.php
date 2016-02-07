@@ -28,8 +28,9 @@ function ciniki_writingcatalog_maps($ciniki) {
 			),	
 		'type'=>array(
 			'30'=>'Book',
-			'31'=>'Short Story',
-			'32'=>'Articles',
+			'40'=>'Short Story',
+			'50'=>'Articles',
+			'60'=>'Poetry',
 			),
 		);
 	

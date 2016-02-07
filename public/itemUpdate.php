@@ -34,6 +34,9 @@ function ciniki_writingcatalog_itemUpdate(&$ciniki) {
         'day'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Day'), 
         'synopsis'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Synopsis'), 
         'description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'), 
+        'content'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Content'), 
+        'inspiration'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Inspiration'), 
+        'awards'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Awards'), 
         'notes'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Notes'),
 		'categories'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Categories'),
         )); 
