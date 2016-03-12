@@ -24,7 +24,7 @@ function ciniki_writingcatalog_itemUpdate(&$ciniki) {
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
         'writingcatalog_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Item'), 
         'title'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Title'), 
-        'subtitle'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Subtitle'), 
+        'subtitle'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Subtitle'), 
 		'type'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Type'),
         'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Web Flags'), 
 		'image_id'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Image'),
