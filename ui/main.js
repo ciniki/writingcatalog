@@ -149,11 +149,11 @@ function ciniki_writingcatalog_main() {
 				'addTxt':'Add Purchasing Option',
 				'addFn':'M.ciniki_writingcatalog_main.contentEdit(\'M.ciniki_writingcatalog_main.itemShow();\',\'0\',\'30\',M.ciniki_writingcatalog_main.item.writingcatalog_id);',
 				},
-//			'images':{'label':'Additional Images', 'type':'simplethumbs'},
-//			'_images':{'label':'', 'type':'simplegrid', 'num_cols':1,
-//				'addTxt':'Add Additional Image',
-//				'addFn':'M.startApp(\'ciniki.writingcatalog.images\',null,\'M.ciniki_writingcatalog_main.itemShow();\',\'mc\',{\'writingcatalog_id\':M.ciniki_writingcatalog_main.item.writingcatalog_id,\'add\':\'yes\'});',
-//				},
+			'images':{'label':'Additional Images', 'type':'simplethumbs'},
+			'_images':{'label':'', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Additional Image',
+				'addFn':'M.startApp(\'ciniki.writingcatalog.images\',null,\'M.ciniki_writingcatalog_main.itemShow();\',\'mc\',{\'writingcatalog_id\':M.ciniki_writingcatalog_main.item.writingcatalog_id,\'add\':\'yes\'});',
+				},
 			'_buttons':{'label':'', 'buttons':{
 				'edit':{'label':'Edit', 'fn':'M.ciniki_writingcatalog_main.itemEdit(\'M.ciniki_writingcatalog_main.itemShow();\',M.ciniki_writingcatalog_main.item.writingcatalog_id);'},
 				'delete':{'label':'Delete', 'fn':'M.ciniki_writingcatalog_main.deletePiece();'},
@@ -182,9 +182,6 @@ function ciniki_writingcatalog_main() {
 				}
 				return com + this.data['year'];
 			}
-//			if( s == '_images' ) {
-//				return d.label;
-//			}
 			return this.data[i];
 		};
 		this.item.fieldValue = function(s, i, d) {

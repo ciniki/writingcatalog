@@ -29,8 +29,7 @@ function ciniki_writingcatalog_flags($ciniki, $modules) {
 		array('flag'=>array('bit'=>'9', 'name'=>'Reviews')),
 		array('flag'=>array('bit'=>'10', 'name'=>'Samples')),
 		array('flag'=>array('bit'=>'11', 'name'=>'Ordering')),
-//		array('flag'=>array('bit'=>'12', 'name'=>'')),
-
+		array('flag'=>array('bit'=>'12', 'name'=>'Images')),
 		);
 
 	return array('stat'=>'ok', 'flags'=>$flags);

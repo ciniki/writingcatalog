@@ -88,6 +88,31 @@ function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $business_
 		$item['orderinfo'] = $rc['content_types']['30']['content'];
 	}
 
+	//
+	// Get any images 
+	//
+	$strsql = "SELECT id, image_id, name, permalink, sequence, webflags, description, "
+		. "UNIX_TIMESTAMP(last_updated) AS last_updated "
+		. "FROM ciniki_writingcatalog_images "
+		. "WHERE writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $item['id']) . "' "
+		. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+		. "AND (webflags&0x01) = 1 "		// Visible images
+		. "ORDER BY sequence, date_added, name "
+		. "";
+	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.writingcatalog', array(
+		array('container'=>'images', 'fname'=>'id', 
+			'fields'=>array('id', 'image_id', 'title'=>'name', 'permalink', 'sequence', 'webflags', 
+				'description', 'last_updated')),
+		));
+	if( $rc['stat'] != 'ok' ) {	
+		return $rc;
+	}
+	if( isset($rc['images']) ) {
+		$item['images'] = $rc['images'];
+	} else {
+		$item['images'] = array();
+	}
+
 	return array('stat'=>'ok', 'item'=>$item);
 }
 ?>
