@@ -175,7 +175,7 @@ function ciniki_writingcatalog_web_processRequest($ciniki, $settings, $business_
                 ciniki_core_loadMethod($ciniki, 'ciniki', 'web', 'private', 'processContent');
                 foreach($item['reviews'] as $review) {
                     $reviews .= "<blockquote class='quote-text'>";
-                    $rc = ciniki_web_processContent($ciniki, $review['content']);
+                    $rc = ciniki_web_processContent($ciniki, $settings, $review['content']);
                     if( $rc['stat'] != 'ok' ) {
                         return $rc;
                     }
@@ -211,7 +211,7 @@ function ciniki_writingcatalog_web_processRequest($ciniki, $settings, $business_
                     if( isset($orderinfo['title']) && $orderinfo['title'] != '' ) {
                         $content .= "<b>" . $orderinfo['title'] . "</b>";
                     }
-                    $rc = ciniki_web_processContent($ciniki, $orderinfo['content']);
+                    $rc = ciniki_web_processContent($ciniki, $settings, $orderinfo['content']);
                     if( $rc['stat'] != 'ok' ) {
                         return $rc;
                     }
