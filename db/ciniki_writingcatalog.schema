@@ -6,56 +6,56 @@
 #
 # Fields
 # -------
-# id:				The id of the writing catalog item.
-# uuid:				The Universal Unique ID.
+# id:               The id of the writing catalog item.
+# uuid:             The Universal Unique ID.
 #
-# business_id:		The business the item is attached to.
+# business_id:      The business the item is attached to.
 #
-# title:			The title of the item.
-# subtitle:			The subtitle for the item.
+# title:            The title of the item.
+# subtitle:         The subtitle for the item.
 #
-# permalink:		The url safe version of the title.  This is automatically 
-#					created when an item is added or the title updated.
+# permalink:        The url safe version of the title.  This is automatically 
+#                   created when an item is added or the title updated.
 #
-# type:				The type field is used to determine how the system should handle the item.
-#					Each item may have a different form or rules.
-#	
-#					0 - unknown
-#					30 - Book
-#					40 - Short Story **future**
-#					50 - Article **future**
+# type:             The type field is used to determine how the system should handle the item.
+#                   Each item may have a different form or rules.
+#   
+#                   0 - unknown
+#                   30 - Book
+#                   40 - Short Story **future**
+#                   50 - Article **future**
 #                   60 - Poetry
 #
-# webflags:			The flags for displaying the image on the website
+# webflags:         The flags for displaying the image on the website
 #
-#					0x01 - Visible, publish on website
-#					0x02 - 
-#					0x04 - 
-#					0x08 - 
-#					0x10 - 
-#					0x20 - 
-#					0x40 - 
-#					0x80 - 
-#					0x0100 - Include reviews
-#					0x0200 - Include samples
-#					0x0400 - Include ordering information
-#					0x0800 - 
-#					0x1000 - 
-#					0x2000 - 
-#					0x4000 - 
-#					0x8000 - 
+#                   0x01 - Visible, publish on website
+#                   0x02 - 
+#                   0x04 - 
+#                   0x08 - 
+#                   0x10 - 
+#                   0x20 - 
+#                   0x40 - 
+#                   0x80 - 
+#                   0x0100 - Include reviews
+#                   0x0200 - Include samples
+#                   0x0400 - Include ordering information
+#                   0x0800 - 
+#                   0x1000 - 
+#                   0x2000 - 
+#                   0x4000 - 
+#                   0x8000 - 
 #
-# image_id:			The image in the images module to use as the default picture.
+# image_id:         The image in the images module to use as the default picture.
 #
-# catalog_number:	The user assigned number for the item.
+# catalog_number:   The user assigned number for the item.
 #
-# year:				The year the item was published.
-# month:			The month the item was published.
-# day:				The day the item was published.
+# year:             The year the item was published.
+# month:            The month the item was published.
+# day:              The day the item was published.
 #
-# synopsis:			The short 2 sentence synopsis of the book.
+# synopsis:         The short 2 sentence synopsis of the book.
 #
-# description:		The description of the item, which is public on the website.
+# description:      The description of the item, which is public on the website.
 #
 # content:          The content for the item. This is for smaller items like Poetry.
 #
@@ -63,35 +63,35 @@
 #
 # awards:           Any awards won by the item.
 #
-# notes:			Any private notes for the item.
+# notes:            Any private notes for the item.
 #
 # date_added:       The UTC date and time the thread was added.
 # last_updated:     The UTC date and time the thread was last updated.
 #
 create table ciniki_writingcatalog (
-	id int not null auto_increment,
-	uuid char(36) not null,
-	business_id int not null,
-	title varchar(200) not null,
-	subtitle varchar(250) not null,
-	permalink varchar(200) not null,
-	type tinyint unsigned not null,
-	webflags int unsigned not null,
-	image_id int not null,
-	catalog_number varchar(100) not null,
-	year varchar(50) not null,
-	month tinyint unsigned not null,
-	day tinyint unsigned not null,
-	synopsis varchar(6000) not null,
-	description varchar(10000) not null,
+    id int not null auto_increment,
+    uuid char(36) not null,
+    business_id int not null,
+    title varchar(200) not null,
+    subtitle varchar(250) not null,
+    permalink varchar(200) not null,
+    type tinyint unsigned not null,
+    webflags int unsigned not null,
+    image_id int not null,
+    catalog_number varchar(100) not null,
+    year varchar(50) not null,
+    month tinyint unsigned not null,
+    day tinyint unsigned not null,
+    synopsis varchar(6000) not null,
+    description varchar(10000) not null,
     content varchar(20000) not null,
     inspiration varchar(4000) not null,
     awards varchar(4000) not null,
-	notes varchar(6000) not null,
-	date_added datetime not null,
-	last_updated datetime not null,
-	primary key (id),
-	unique index (permalink, business_id),
-	index sync (business_id, uuid, date_added),
-	index (year, month, day)
+    notes varchar(6000) not null,
+    date_added datetime not null,
+    last_updated datetime not null,
+    primary key (id),
+    unique index (permalink, business_id),
+    index sync (business_id, uuid, date_added),
+    index (year, month, day)
 ) ENGINE='InnoDB', COMMENT='v1.02';
