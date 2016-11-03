@@ -51,7 +51,7 @@ function ciniki_writingcatalog_web_writingSample($ciniki, $settings, $business_i
         return $rc;
     }
     if( !isset($rc['items']) && count($rc['items']) != 1 ) {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2501', 'msg'=>"I'm sorry, but we can't seem to find the item you requested."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.writingcatalog.26', 'msg'=>"I'm sorry, but we can't seem to find the item you requested."));
     }
     $item = array_pop($rc['items']);
 

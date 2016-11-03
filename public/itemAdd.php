@@ -82,7 +82,7 @@ function ciniki_writingcatalog_itemAdd(&$ciniki) {
         return $rc;
     }
     if( $rc['num_rows'] > 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2456', 'msg'=>'You already have an item with this title, please choose another title.'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.writingcatalog.15', 'msg'=>'You already have an item with this title, please choose another title.'));
     }
 
     //  

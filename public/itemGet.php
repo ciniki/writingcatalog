@@ -127,7 +127,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
             return $rc;
         }
         if( !isset($rc['items']) ) {
-            return array('stat'=>'ok', 'err'=>array('pkg'=>'ciniki', 'code'=>'2461', 'msg'=>'Unable to find item'));
+            return array('stat'=>'ok', 'err'=>array('code'=>'ciniki.writingcatalog.20', 'msg'=>'Unable to find item'));
         }
         $item = $rc['items'][0]['item'];
 
@@ -284,7 +284,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
         $rc = ciniki_core_tagsList($ciniki, 'ciniki.writingcatalog', $args['business_id'], 
             'ciniki_writingcatalog_tags', 10);
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2462', 'msg'=>'Unable to get list of categories', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.writingcatalog.21', 'msg'=>'Unable to get list of categories', 'err'=>$rc['err']));
         }
         if( isset($rc['tags']) ) {
             $rsp['categories'] = $rc['tags'];

@@ -96,7 +96,7 @@ function ciniki_writingcatalog_contentGet($ciniki) {
             return $rc;
         }
         if( !isset($rc['content']) ) {
-            return array('stat'=>'ok', 'err'=>array('pkg'=>'ciniki', 'code'=>'2500', 'msg'=>'Unable to find content'));
+            return array('stat'=>'ok', 'err'=>array('code'=>'ciniki.writingcatalog.6', 'msg'=>'Unable to find content'));
         }
         $content = $rc['content'][0]['content'];
     }

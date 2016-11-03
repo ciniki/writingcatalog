@@ -56,7 +56,7 @@ function ciniki_writingcatalog_searchField($ciniki) {
     // Reject if an unknown field
     //
     if( $args['field'] != 'year') {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2502', 'msg'=>'Unvalid search field'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.writingcatalog.23', 'msg'=>'Unvalid search field'));
     }
     //
     // Get the number of faqs in each status for the business, 

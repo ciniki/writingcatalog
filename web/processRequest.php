@@ -18,7 +18,7 @@ function ciniki_writingcatalog_web_processRequest($ciniki, $settings, $business_
     // Check to make sure the module is enabled
     //
     if( !isset($ciniki['business']['modules']['ciniki.writingcatalog']) ) {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3187', 'msg'=>"I'm sorry, the page you requested does not exist."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.writingcatalog.24', 'msg'=>"I'm sorry, the page you requested does not exist."));
     }
     $page = array(
         'title'=>$args['page_title'],

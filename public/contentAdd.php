@@ -76,12 +76,12 @@ function ciniki_writingcatalog_contentAdd(&$ciniki) {
             return $rc;
         }
         if( $rc['num_rows'] > 0 ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2497', 'msg'=>'You already have an image with this name, please choose another name'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.writingcatalog.3', 'msg'=>'You already have an image with this name, please choose another name'));
         }
     }
 
     if( $args['writingcatalog_id'] <= 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2498', 'msg'=>'No writingcatalog specified'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.writingcatalog.4', 'msg'=>'No writingcatalog specified'));
     }
 
     //

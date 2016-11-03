@@ -64,7 +64,7 @@ function ciniki_writingcatalog_imageGet($ciniki) {
         return $rc;
     }
     if( !isset($rc['images']) ) {
-        return array('stat'=>'ok', 'err'=>array('pkg'=>'ciniki', 'code'=>'2453', 'msg'=>'Unable to find image'));
+        return array('stat'=>'ok', 'err'=>array('code'=>'ciniki.writingcatalog.12', 'msg'=>'Unable to find image'));
     }
     $image = $rc['images'][0]['image'];
     

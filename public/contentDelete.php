@@ -47,7 +47,7 @@ function ciniki_writingcatalog_contentDelete(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['content']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2499', 'msg'=>'Content does not exist'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.writingcatalog.5', 'msg'=>'Content does not exist'));
     }
     $content = $rc['content'];
 

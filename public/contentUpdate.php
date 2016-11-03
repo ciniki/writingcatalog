@@ -59,7 +59,7 @@ function ciniki_writingcatalog_contentUpdate(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['content']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2374', 'msg'=>'Content not found'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.writingcatalog.7', 'msg'=>'Content not found'));
     }
     $content = $rc['content'];
 
@@ -80,7 +80,7 @@ function ciniki_writingcatalog_contentUpdate(&$ciniki) {
             return $rc;
         }
         if( $rc['num_rows'] > 0 ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2375', 'msg'=>'You already have an content with this title, please choose another title'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.writingcatalog.8', 'msg'=>'You already have an content with this title, please choose another title'));
         }
     } 
 
