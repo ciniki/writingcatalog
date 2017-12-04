@@ -16,7 +16,7 @@ function ciniki_writingcatalog_itemList($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -25,10 +25,10 @@ function ciniki_writingcatalog_itemList($ciniki) {
    
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'writingcatalog', 'private', 'checkAccess');
-    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.itemList'); 
+    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['tnid'], 'ciniki.writingcatalog.itemList'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -46,8 +46,8 @@ function ciniki_writingcatalog_itemList($ciniki) {
     //
     // Load INTL settings
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'intlSettings');
-    $rc = ciniki_businesses_intlSettings($ciniki, $args['business_id']);
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'intlSettings');
+    $rc = ciniki_tenants_intlSettings($ciniki, $args['tnid']);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -67,7 +67,7 @@ function ciniki_writingcatalog_itemList($ciniki) {
         . "ciniki_writingcatalog.image_id, "
         . "ciniki_writingcatalog.synopsis "
         . "FROM ciniki_writingcatalog "
-        . "WHERE ciniki_writingcatalog.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE ciniki_writingcatalog.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "ORDER BY ciniki_writingcatalog.type, ciniki_writingcatalog.title "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
@@ -92,7 +92,7 @@ function ciniki_writingcatalog_itemList($ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'images', 'private', 'loadCacheThumbnail');
         foreach($items as $iid => $item) {
             if( isset($item['item']['image_id']) && $item['item']['image_id'] > 0 ) {
-                $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['business_id'], $item['item']['image_id'], 75);
+                $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['tnid'], $item['item']['image_id'], 75);
                 if( $rc['stat'] != 'ok' ) {
                     return $rc;
                 }

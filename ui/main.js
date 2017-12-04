@@ -225,7 +225,7 @@ function ciniki_writingcatalog_main() {
         };
         this.item.addDropImage = function(iid) {
             var rsp = M.api.getJSON('ciniki.writingcatalog.imageAdd',
-                {'business_id':M.curBusinessID, 'image_id':iid,
+                {'tnid':M.curTenantID, 'image_id':iid,
                     'writingcatalog_id':M.ciniki_writingcatalog_main.item.writingcatalog_id});
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
@@ -235,7 +235,7 @@ function ciniki_writingcatalog_main() {
         };
         this.item.addDropImageRefresh = function() {
             if( M.ciniki_writingcatalog_main.item.writingcatalog_id > 0 ) {
-                var rsp = M.api.getJSONCb('ciniki.writingcatalog.get', {'business_id':M.curBusinessID, 
+                var rsp = M.api.getJSONCb('ciniki.writingcatalog.get', {'tnid':M.curTenantID, 
                     'writingcatalog_id':M.ciniki_writingcatalog_main.item.writingcatalog_id, 'images':'yes'}, function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -353,7 +353,7 @@ function ciniki_writingcatalog_main() {
         };
         this.edit.liveSearchCb = function(s, i, value) {
             if( i == 'year' ) {
-                var rsp = M.api.getJSONBgCb('ciniki.writingcatalog.searchField', {'business_id':M.curBusinessID, 'field':i, 'start_needle':value, 'limit':15},
+                var rsp = M.api.getJSONBgCb('ciniki.writingcatalog.searchField', {'tnid':M.curTenantID, 'field':i, 'start_needle':value, 'limit':15},
                     function(rsp) {
                         M.ciniki_writingcatalog_main.edit.liveSearchShow(s, i, M.gE(M.ciniki_writingcatalog_main.edit.panelUID + '_' + i), rsp.results);
                     });
@@ -374,7 +374,7 @@ function ciniki_writingcatalog_main() {
         };
         this.edit.fieldHistoryArgs = function(s, i) {
             return {'method':'ciniki.writingcatalog.itemHistory', 
-                'args':{'business_id':M.curBusinessID, 'writingcatalog_id':this.writingcatalog_id, 'field':i}};
+                'args':{'tnid':M.curTenantID, 'writingcatalog_id':this.writingcatalog_id, 'field':i}};
         }
         this.edit.addDropImage = function(iid) {
             M.ciniki_writingcatalog_main.edit.setFieldValue('image_id', iid);
@@ -439,7 +439,7 @@ function ciniki_writingcatalog_main() {
                 'content':{'label':'', 'type':'textarea', 'size':'large', 'hidelabel':'yes'},
                 }},
             'paypal':{'label':'Paypal', 'type':'simpleform', 'fields':{
-                'paypal_business':{'label':'Business Email', 'type':'text'},
+                'paypal_business':{'label':'Tenant Email', 'type':'text'},
                 'paypal_price':{'label':'Price', 'type':'text', 'size':'small'},
                 'paypal_currency':{'label':'Currency', 'type':'toggle', 'default':'CAD', 'toggles':{'CAD':'CAD', 'USD':'USD'}},
                 }},
@@ -492,21 +492,21 @@ function ciniki_writingcatalog_main() {
             return false;
         }
 
-        this.item.sections.reviews.visible = (M.curBusiness.modules['ciniki.writingcatalog'].flags&0x0100) > 0?'yes':'no';
-        this.item.sections.samples.visible = (M.curBusiness.modules['ciniki.writingcatalog'].flags&0x0200) > 0?'yes':'no';
-        this.item.sections.orderinginfo.visible = (M.curBusiness.modules['ciniki.writingcatalog'].flags&0x0400) > 0?'yes':'no';
+        this.item.sections.reviews.visible = (M.curTenant.modules['ciniki.writingcatalog'].flags&0x0100) > 0?'yes':'no';
+        this.item.sections.samples.visible = (M.curTenant.modules['ciniki.writingcatalog'].flags&0x0200) > 0?'yes':'no';
+        this.item.sections.orderinginfo.visible = (M.curTenant.modules['ciniki.writingcatalog'].flags&0x0400) > 0?'yes':'no';
 
-        this.content.formtabs.tabs.review.visible = (M.curBusiness.modules['ciniki.writingcatalog'].flags&0x0100) > 0?'yes':'no';
-        this.content.formtabs.tabs.sample.visible = (M.curBusiness.modules['ciniki.writingcatalog'].flags&0x0200) > 0?'yes':'no';
-        this.content.formtabs.tabs.orderinfo.visible = (M.curBusiness.modules['ciniki.writingcatalog'].flags&0x0400) > 0?'yes':'no';
+        this.content.formtabs.tabs.review.visible = (M.curTenant.modules['ciniki.writingcatalog'].flags&0x0100) > 0?'yes':'no';
+        this.content.formtabs.tabs.sample.visible = (M.curTenant.modules['ciniki.writingcatalog'].flags&0x0200) > 0?'yes':'no';
+        this.content.formtabs.tabs.orderinfo.visible = (M.curTenant.modules['ciniki.writingcatalog'].flags&0x0400) > 0?'yes':'no';
 
-        this.item.sections.info.list.categories.visible = (M.curBusiness.modules['ciniki.writingcatalog'].flags&0x04) > 0?'yes':'no';
+        this.item.sections.info.list.categories.visible = (M.curTenant.modules['ciniki.writingcatalog'].flags&0x04) > 0?'yes':'no';
 
         //
         // Set lists to visible if enabled
         //
         for(i in this.edit.forms) {
-            if( (M.curBusiness.modules['ciniki.writingcatalog'].flags&0x04) > 0 ) {
+            if( (M.curTenant.modules['ciniki.writingcatalog'].flags&0x04) > 0 ) {
                 this.edit.forms[i]._categories.active = 'yes';
             } else {
                 this.edit.forms[i]._categories.active = 'no';
@@ -523,7 +523,7 @@ function ciniki_writingcatalog_main() {
     }
 
     this.showMenu = function(cb) {
-        M.api.getJSONCb('ciniki.writingcatalog.itemList', {'business_id':M.curBusinessID}, function(rsp) {
+        M.api.getJSONCb('ciniki.writingcatalog.itemList', {'tnid':M.curTenantID}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -539,7 +539,7 @@ function ciniki_writingcatalog_main() {
         if( iid != null ) { this.item.writingcatalog_id = iid; }
         if( list != null ) { this.item.list = list; }
         M.api.getJSONCb('ciniki.writingcatalog.itemGet', 
-            {'business_id':M.curBusinessID, 'writingcatalog_id':this.item.writingcatalog_id, 'images':'yes', 'content':'yes'}, function(rsp) {
+            {'tnid':M.curTenantID, 'writingcatalog_id':this.item.writingcatalog_id, 'images':'yes', 'content':'yes'}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -574,7 +574,7 @@ function ciniki_writingcatalog_main() {
     this.refreshItemImages = function() {
         if( M.ciniki_writingcatalog_main.item.writingcatalog_id > 0 ) {
             var rsp = M.api.getJSONCb('ciniki.writingcatalog.get', 
-                {'business_id':M.curBusinessID, 'writingcatalog_id':M.ciniki_writingcatalog_main.item.writingcatalog_id, 'images':'yes'}, function(rsp) {
+                {'tnid':M.curTenantID, 'writingcatalog_id':M.ciniki_writingcatalog_main.item.writingcatalog_id, 'images':'yes'}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -589,7 +589,7 @@ function ciniki_writingcatalog_main() {
 
     this.itemEdit = function(cb, iid) {
         if( iid != null ) { this.edit.writingcatalog_id = iid; }
-        M.api.getJSONCb('ciniki.writingcatalog.itemGet', {'business_id':M.curBusinessID, 'writingcatalog_id':this.edit.writingcatalog_id, 'categories':'yes'}, function(rsp) {
+        M.api.getJSONCb('ciniki.writingcatalog.itemGet', {'tnid':M.curTenantID, 'writingcatalog_id':this.edit.writingcatalog_id, 'categories':'yes'}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -619,7 +619,7 @@ function ciniki_writingcatalog_main() {
                     return false;
                 }
                 M.api.postJSONFormData('ciniki.writingcatalog.itemUpdate', 
-                    {'business_id':M.curBusinessID, 'writingcatalog_id':this.edit.writingcatalog_id}, c,
+                    {'tnid':M.curTenantID, 'writingcatalog_id':this.edit.writingcatalog_id}, c,
                         function(rsp) {
                             if( rsp.stat != 'ok' ) {
                                 M.api.err(rsp);
@@ -636,7 +636,7 @@ function ciniki_writingcatalog_main() {
                 alert('You must specifiy a title');
                 return false;
             }
-            M.api.postJSONFormData('ciniki.writingcatalog.itemAdd', {'business_id':M.curBusinessID}, c, function(rsp) {
+            M.api.postJSONFormData('ciniki.writingcatalog.itemAdd', {'tnid':M.curTenantID}, c, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -649,7 +649,7 @@ function ciniki_writingcatalog_main() {
 
     this.itemDelete = function() {
         if( confirm('Are you sure you want to delete \'' + this.item.data.title + '\'?  All information will be removed. There is no way to get the information back once deleted.') ) {
-            var rsp = M.api.getJSONCb('ciniki.writingcatalog.itemDelete', {'business_id':M.curBusinessID, 'writingcatalog_id':this.item.writingcatalog_id}, function(rsp) {
+            var rsp = M.api.getJSONCb('ciniki.writingcatalog.itemDelete', {'tnid':M.curTenantID, 'writingcatalog_id':this.item.writingcatalog_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -662,7 +662,7 @@ function ciniki_writingcatalog_main() {
     this.contentEdit = function(cb, cid, ctype, wid) {
         if( cid != null ) { this.content.content_id = cid; }
         if( wid != null ) { this.content.writingcatalog_id = wid; }
-        var args = {'business_id':M.curBusinessID, 'content_id':this.content.content_id, 'writingcatalog_id':this.content.writingcatalog_id};
+        var args = {'tnid':M.curTenantID, 'content_id':this.content.content_id, 'writingcatalog_id':this.content.writingcatalog_id};
         if( this.content.content_id == 0 && ctype != null ) {
             args['content_type'] = ctype;
         }
@@ -684,7 +684,7 @@ function ciniki_writingcatalog_main() {
             var c = this.content.serializeForm('no');
             if( c != '' ) {
                 M.api.postJSONCb('ciniki.writingcatalog.contentUpdate', 
-                    {'business_id':M.curBusinessID, 'content_id':this.content.content_id}, c, function(rsp) {
+                    {'tnid':M.curTenantID, 'content_id':this.content.content_id}, c, function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
                             return false;
@@ -698,7 +698,7 @@ function ciniki_writingcatalog_main() {
         } else {
             var c = this.content.serializeForm('yes');
             c += 'writingcatalog_id=' + this.content.writingcatalog_id + '&';
-            M.api.postJSONCb('ciniki.writingcatalog.contentAdd', {'business_id':M.curBusinessID}, c, function(rsp) {
+            M.api.postJSONCb('ciniki.writingcatalog.contentAdd', {'tnid':M.curTenantID}, c, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -711,7 +711,7 @@ function ciniki_writingcatalog_main() {
 
     this.contentDelete = function() {
         if( confirm('Are you sure you want to delete this content?') ) {
-            var rsp = M.api.getJSONCb('ciniki.writingcatalog.contentDelete', {'business_id':M.curBusinessID, 'content_id':this.content.content_id}, function(rsp) {
+            var rsp = M.api.getJSONCb('ciniki.writingcatalog.contentDelete', {'tnid':M.curTenantID, 'content_id':this.content.content_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;

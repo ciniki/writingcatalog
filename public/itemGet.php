@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to get the item from.
+// tnid:         The ID of the tenant to get the item from.
 // writingcatalog_id:       The ID of the item in the catalog to be retrieved.
 // 
 // Returns
@@ -20,7 +20,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'writingcatalog_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Item'), 
         'images'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Images'),
         'content'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Content'),
@@ -41,10 +41,10 @@ function ciniki_writingcatalog_itemGet($ciniki) {
     
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'writingcatalog', 'private', 'checkAccess');
-    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.itemGet'); 
+    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['tnid'], 'ciniki.writingcatalog.itemGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }
@@ -53,8 +53,8 @@ function ciniki_writingcatalog_itemGet($ciniki) {
     //
     // Load INTL settings
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'intlSettings');
-    $rc = ciniki_businesses_intlSettings($ciniki, $args['business_id']);
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'intlSettings');
+    $rc = ciniki_tenants_intlSettings($ciniki, $args['tnid']);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -111,7 +111,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
             . "ciniki_writingcatalog.awards, "
             . "ciniki_writingcatalog.notes "
             . "FROM ciniki_writingcatalog "
-            . "WHERE ciniki_writingcatalog.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_writingcatalog.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_writingcatalog.id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
             . "";
 
@@ -134,11 +134,11 @@ function ciniki_writingcatalog_itemGet($ciniki) {
         //
         // Get the categories for the item
         //
-        if( ($ciniki['business']['modules']['ciniki.writingcatalog']['flags']&0x04) > 0 ) {
+        if( ($ciniki['tenant']['modules']['ciniki.writingcatalog']['flags']&0x04) > 0 ) {
             $strsql = "SELECT tag_type, tag_name AS lists "
                 . "FROM ciniki_writingcatalog_tags "
                 . "WHERE writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
-                . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "ORDER BY tag_type, tag_name "
                 . "";
             $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.writingcatalog', array(
@@ -170,7 +170,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
                 . "ciniki_writingcatalog_images.description "
                 . "FROM ciniki_writingcatalog_images "
                 . "WHERE ciniki_writingcatalog_images.writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
-                . "AND ciniki_writingcatalog_images.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND ciniki_writingcatalog_images.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "ORDER BY ciniki_writingcatalog_images.sequence, ciniki_writingcatalog_images.date_added, ciniki_writingcatalog_images.name "
                 . "";
             $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.writingcatalog', array(
@@ -184,7 +184,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
                 $item['images'] = $rc['images'];
                 foreach($item['images'] as $inum => $img) {
                     if( isset($img['image']['image_id']) && $img['image']['image_id'] > 0 ) {
-                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['business_id'], $img['image']['image_id'], 75);
+                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['tnid'], $img['image']['image_id'], 75);
                         if( $rc['stat'] != 'ok' ) {
                             return $rc;
                         }
@@ -201,7 +201,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
             $strsql = "SELECT id, title, permalink, content_type "
                 . "FROM ciniki_writingcatalog_content "
                 . "WHERE writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
-                . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "ORDER BY ciniki_writingcatalog_content.content_type, ciniki_writingcatalog_content.sequence, ciniki_writingcatalog_content.title "
                 . "";
             $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.writingcatalog', array(
@@ -231,12 +231,12 @@ function ciniki_writingcatalog_itemGet($ciniki) {
     // Get the product list if requested
     //
 //  if( isset($args['products']) && $args['products'] == 'yes' 
-//      && ($ciniki['business']['modules']['ciniki.writingcatalog']['flags']&0x02) > 0
+//      && ($ciniki['tenant']['modules']['ciniki.writingcatalog']['flags']&0x02) > 0
 //      ) {
 //      $strsql = "SELECT id, name, inventory, price "
 //          . "FROM ciniki_writingcatalog_products "
 //          . "WHERE writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
-//          . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+//          . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
 //          . "ORDER BY ciniki_writingcatalog_products.name "
 //          . "";
 //      $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.writingcatalog', array(
@@ -261,7 +261,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
     //
 //  if( isset($args['invoices']) && $args['invoices'] == 'yes' && isset($modules['ciniki.sapos']) ) {
 //      ciniki_core_loadMethod($ciniki, 'ciniki', 'sapos', 'private', 'objectInvoices');
-//      $rc = ciniki_sapos_objectInvoices($ciniki, $args['business_id'], 'ciniki.writingcatalog.item', $args['writingcatalog_id']);
+//      $rc = ciniki_sapos_objectInvoices($ciniki, $args['tnid'], 'ciniki.writingcatalog.item', $args['writingcatalog_id']);
 //      if( $rc['stat'] != 'ok' ) {
 //          return $rc;
 //      }
@@ -274,14 +274,14 @@ function ciniki_writingcatalog_itemGet($ciniki) {
     // Check if all tags should be returned
     //
     $rsp['categories'] = array();
-    if( ($ciniki['business']['modules']['ciniki.writingcatalog']['flags']&0x04) > 0
+    if( ($ciniki['tenant']['modules']['ciniki.writingcatalog']['flags']&0x04) > 0
         && isset($args['categories']) && $args['categories'] == 'yes' 
         ) {
         //
         // Get the available tags
         //
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsList');
-        $rc = ciniki_core_tagsList($ciniki, 'ciniki.writingcatalog', $args['business_id'], 
+        $rc = ciniki_core_tagsList($ciniki, 'ciniki.writingcatalog', $args['tnid'], 
             'ciniki_writingcatalog_tags', 10);
         if( $rc['stat'] != 'ok' ) {
             return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.writingcatalog.21', 'msg'=>'Unable to get list of categories', 'err'=>$rc['err']));

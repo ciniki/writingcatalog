@@ -9,8 +9,8 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:     The ID of the business to add the item to.  The user must
-//                  an owner of the business.
+// tnid:     The ID of the tenant to add the item to.  The user must
+//                  an owner of the tenant.
 // 
 // Returns
 // -------
@@ -22,7 +22,7 @@ function ciniki_writingcatalog_itemAdd(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'title'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Title'), 
         'subtitle'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Subtitle'), 
         'permalink'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Permalink'), 
@@ -48,10 +48,10 @@ function ciniki_writingcatalog_itemAdd(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'writingcatalog', 'private', 'checkAccess');
-    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.itemAdd'); 
+    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['tnid'], 'ciniki.writingcatalog.itemAdd'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -73,7 +73,7 @@ function ciniki_writingcatalog_itemAdd(&$ciniki) {
     // Check the permalink doesn't already exist
     //
     $strsql = "SELECT id, title, permalink FROM ciniki_writingcatalog "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQuery');
@@ -100,7 +100,7 @@ function ciniki_writingcatalog_itemAdd(&$ciniki) {
     }   
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
-    $rc = ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.writingcatalog.item', $args, 0x04);
+    $rc = ciniki_core_objectAdd($ciniki, $args['tnid'], 'ciniki.writingcatalog.item', $args, 0x04);
     if( $rc['stat'] != 'ok' ) {
         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.writingcatalog');
         return $rc;
@@ -112,7 +112,7 @@ function ciniki_writingcatalog_itemAdd(&$ciniki) {
     //
     if( isset($args['categories']) ) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
-        $rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.writingcatalog', 'tag', $args['business_id'],
+        $rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.writingcatalog', 'tag', $args['tnid'],
             'ciniki_writingcatalog_tags', 'ciniki_writingcatalog_history',
             'writingcatalog_id', $writingcatalog_id, 10, $args['categories']);
         if( $rc['stat'] != 'ok' ) {
@@ -130,11 +130,11 @@ function ciniki_writingcatalog_itemAdd(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'writingcatalog');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'writingcatalog');
 
     return array('stat'=>'ok', 'id'=>$writingcatalog_id);
 }

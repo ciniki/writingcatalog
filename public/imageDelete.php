@@ -16,7 +16,7 @@ function ciniki_writingcatalog_imageDelete(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'writingcatalog_image_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Image'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
@@ -26,10 +26,10 @@ function ciniki_writingcatalog_imageDelete(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'writingcatalog', 'private', 'checkAccess');
-    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.imageDelete'); 
+    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['tnid'], 'ciniki.writingcatalog.imageDelete'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -38,7 +38,7 @@ function ciniki_writingcatalog_imageDelete(&$ciniki) {
     // Get the existing image information
     //
     $strsql = "SELECT id, uuid FROM ciniki_writingcatalog_images "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_image_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.writingcatalog', 'item');
@@ -55,7 +55,7 @@ function ciniki_writingcatalog_imageDelete(&$ciniki) {
     // Delete the image
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectDelete');
-    return ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.writingcatalog.image', 
+    return ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.writingcatalog.image', 
         $args['writingcatalog_image_id'], $item['uuid'], 0x07);
 }
 ?>

@@ -16,7 +16,7 @@ function ciniki_writingcatalog_contentDelete(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'content_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Content'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
@@ -26,10 +26,10 @@ function ciniki_writingcatalog_contentDelete(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'writingcatalog', 'private', 'checkAccess');
-    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.contentDelete'); 
+    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['tnid'], 'ciniki.writingcatalog.contentDelete'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -39,7 +39,7 @@ function ciniki_writingcatalog_contentDelete(&$ciniki) {
     //
     $strsql = "SELECT id, uuid "
         . "FROM ciniki_writingcatalog_content "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['content_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.writingcatalog', 'content');
@@ -55,7 +55,7 @@ function ciniki_writingcatalog_contentDelete(&$ciniki) {
     // Delete the content
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectDelete');
-    return ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.writingcatalog.content', 
+    return ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.writingcatalog.content', 
         $args['content_id'], $content['uuid'], 0x07);
 }
 ?>

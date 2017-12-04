@@ -9,13 +9,13 @@
 // Returns
 // -------
 //
-function ciniki_writingcatalog_web_writingSample($ciniki, $settings, $business_id, $permalink, $sample_permalink) {
+function ciniki_writingcatalog_web_writingSample($ciniki, $settings, $tnid, $permalink, $sample_permalink) {
 
     //
     // Load INTL settings
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'intlSettings');
-    $rc = ciniki_businesses_intlSettings($ciniki, $business_id);
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'intlSettings');
+    $rc = ciniki_tenants_intlSettings($ciniki, $tnid);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -37,7 +37,7 @@ function ciniki_writingcatalog_web_writingSample($ciniki, $settings, $business_i
         . "ciniki_writingcatalog.synopsis, "
         . "ciniki_writingcatalog.description "
         . "FROM ciniki_writingcatalog "
-        . "WHERE ciniki_writingcatalog.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_writingcatalog.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_writingcatalog.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
         . "AND (ciniki_writingcatalog.webflags&0x01) = 0x01 "
         . "";
@@ -60,7 +60,7 @@ function ciniki_writingcatalog_web_writingSample($ciniki, $settings, $business_i
     //
     $strsql = "SELECT id, title, permalink, content_type, image_id, content "
         . "FROM ciniki_writingcatalog_content "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_writingcatalog_content.writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $item['id']) . "' "
         . "AND ciniki_writingcatalog_content.permalink = '" . ciniki_core_dbQuote($ciniki, $sample_permalink) . "' "
         . "";

@@ -7,7 +7,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business the image belongs to.
+// tnid:         The ID of the tenant the image belongs to.
 // name:                The name of the image.  
 //
 // Returns
@@ -20,7 +20,7 @@ function ciniki_writingcatalog_imageUpdate(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'writingcatalog_image_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Additional Image'), 
         'name'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Title'), 
         'permalink'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Permalink'), 
@@ -36,10 +36,10 @@ function ciniki_writingcatalog_imageUpdate(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'writingcatalog', 'private', 'checkAccess');
-    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.imageUpdate'); 
+    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['tnid'], 'ciniki.writingcatalog.imageUpdate'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }
@@ -48,7 +48,7 @@ function ciniki_writingcatalog_imageUpdate(&$ciniki) {
     // Get the existing image details
     //
     $strsql = "SELECT uuid, writingcatalog_id, image_id FROM ciniki_writingcatalog_images "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_image_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.writingcatalog', 'item');
@@ -71,7 +71,7 @@ function ciniki_writingcatalog_imageUpdate(&$ciniki) {
         // Make sure the permalink is unique
         //
         $strsql = "SELECT id, name, permalink FROM ciniki_writingcatalog_images "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
             . "AND writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $item['writingcatalog_id']) . "' "
             . "AND id <> '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_image_id']) . "' "
@@ -89,6 +89,6 @@ function ciniki_writingcatalog_imageUpdate(&$ciniki) {
     // Update the image
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectUpdate');
-    return ciniki_core_objectUpdate($ciniki, $args['business_id'], 'ciniki.writingcatalog.image', $args['writingcatalog_image_id'], $args);
+    return ciniki_core_objectUpdate($ciniki, $args['tnid'], 'ciniki.writingcatalog.image', $args['writingcatalog_image_id'], $args);
 }
 ?>

@@ -7,7 +7,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to add the content to.
+// tnid:         The ID of the tenant to add the content to.
 // content_id:          The ID of the content to get.
 //
 // Returns
@@ -19,7 +19,7 @@ function ciniki_writingcatalog_contentGet($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'content_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Content'),
         'writingcatalog_id'=>array('required'=>'no', 'blank'=>'no', 'default'=>'0', 'name'=>'Item'),
         'content_type'=>array('required'=>'no', 'blank'=>'no', 'default'=>'10', 'name'=>'Type'),
@@ -31,10 +31,10 @@ function ciniki_writingcatalog_contentGet($ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'writingcatalog', 'private', 'checkAccess');
-    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['business_id'], 'ciniki.writingcatalog.contentGet'); 
+    $rc = ciniki_writingcatalog_checkAccess($ciniki, $args['tnid'], 'ciniki.writingcatalog.contentGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -57,7 +57,7 @@ function ciniki_writingcatalog_contentGet($ciniki) {
             );
         $strsql = "SELECT MAX(sequence)+1 AS next_sequence "
             . "FROM ciniki_writingcatalog_content "
-            . "WHERE ciniki_writingcatalog_content.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_writingcatalog_content.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_writingcatalog_content.writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
             . "AND ciniki_writingcatalog_content.content_type = '" . ciniki_core_dbQuote($ciniki, $args['content_type']) . "' "
             . "";
@@ -83,7 +83,7 @@ function ciniki_writingcatalog_contentGet($ciniki) {
             . "ciniki_writingcatalog_content.paypal_price, "
             . "ciniki_writingcatalog_content.paypal_currency "
             . "FROM ciniki_writingcatalog_content "
-            . "WHERE ciniki_writingcatalog_content.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_writingcatalog_content.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_writingcatalog_content.id = '" . ciniki_core_dbQuote($ciniki, $args['content_id']) . "' "
             . "";
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');

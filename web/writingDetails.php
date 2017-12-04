@@ -9,13 +9,13 @@
 // Returns
 // -------
 //
-function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $business_id, $permalink) {
+function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $tnid, $permalink) {
 
     //
     // Load INTL settings
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'intlSettings');
-    $rc = ciniki_businesses_intlSettings($ciniki, $business_id);
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'intlSettings');
+    $rc = ciniki_tenants_intlSettings($ciniki, $tnid);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -40,7 +40,7 @@ function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $business_
         . "ciniki_writingcatalog.inspiration, "
         . "ciniki_writingcatalog.awards "
         . "FROM ciniki_writingcatalog "
-        . "WHERE ciniki_writingcatalog.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_writingcatalog.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_writingcatalog.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
         . "AND (ciniki_writingcatalog.webflags&0x01) = 0x01 "
         . "";
@@ -64,7 +64,7 @@ function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $business_
     $strsql = "SELECT id, title, permalink, content_type, image_id, content, "
         . "paypal_business, FORMAT(paypal_price, 2) AS paypal_price, paypal_currency "
         . "FROM ciniki_writingcatalog_content "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_writingcatalog_content.writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $item['id']) . "' "
         . "ORDER BY content_type, sequence "
         . "";
@@ -95,7 +95,7 @@ function ciniki_writingcatalog_web_writingDetails($ciniki, $settings, $business_
         . "UNIX_TIMESTAMP(last_updated) AS last_updated "
         . "FROM ciniki_writingcatalog_images "
         . "WHERE writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $item['id']) . "' "
-        . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND (webflags&0x01) = 1 "        // Visible images
         . "ORDER BY sequence, date_added, name "
         . "";

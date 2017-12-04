@@ -9,7 +9,7 @@
 // Returns
 // -------
 //
-function ciniki_writingcatalog_web_writingCovers($ciniki, $settings, $business_id, $args) {
+function ciniki_writingcatalog_web_writingCovers($ciniki, $settings, $tnid, $args) {
 
     //
     // Load the status maps for the text description of each status
@@ -36,7 +36,7 @@ function ciniki_writingcatalog_web_writingCovers($ciniki, $settings, $business_i
         . "'yes' AS is_details, "
         . "UNIX_TIMESTAMP(ciniki_writingcatalog.last_updated) AS last_updated "
         . "FROM ciniki_writingcatalog "
-        . "WHERE ciniki_writingcatalog.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_writingcatalog.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND (ciniki_writingcatalog.webflags&0x01) = 0x01 "
         . "ORDER BY ciniki_writingcatalog.type, ciniki_writingcatalog.title "
         . "";
