@@ -218,7 +218,7 @@ function ciniki_writingcatalog_web_processRequest($ciniki, $settings, $tnid, $ar
                     $content .= $rc['content'];
                     if( isset($orderinfo['paypal_business']) && $orderinfo['paypal_business'] != '' ) {
                         $content .= "<form style='display:inline-block;width:10em;' target='paypal' action='https://www.paypal.com/cgi-bin/webscr' method='post'>"
-                            . "<input type='hidden' name='tenant' value='" . $orderinfo['paypal_business'] . "'>"
+                            . "<input type='hidden' name='business' value='" . $orderinfo['paypal_business'] . "'>"
                             . "<input type='hidden' name='cmd' value='_cart'>"
                             . "<input type='hidden' name='add' value='1'>"
                             . "<input type='hidden' name='item_name' value='" . $item['title'] . "'>"
@@ -228,7 +228,7 @@ function ciniki_writingcatalog_web_processRequest($ciniki, $settings, $tnid, $ar
                             . "<img alt='' border='0' width='1' height='1' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' >"
                             . "</form>";
                         $content .= "<form style='display:inline-block;width:10em;' target='paypal' action='https://www.paypal.com/cgi-bin/webscr' method='post'>"
-                            . "<input type='hidden' name='tenant' value='" . $orderinfo['paypal_business'] . "'>"
+                            . "<input type='hidden' name='business' value='" . $orderinfo['paypal_business'] . "'>"
                             . "<input type='hidden' name='cmd' value='_cart'>"
                             . "<input type='hidden' name='display' value='1'>"
                             . "<input type='image' name='submit' border='0' src='https://www.paypalobjects.com/en_US/i/btn/btn_viewcart_LG.gif' alt='PayPal - The safer, easier way     to pay online'>"
