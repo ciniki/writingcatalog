@@ -488,7 +488,7 @@ function ciniki_writingcatalog_main() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_writingcatalog_main', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
 
@@ -615,7 +615,7 @@ function ciniki_writingcatalog_main() {
             if( c != '' ) {
                 var nv = this.edit.formFieldValue(this.edit.sections.info.fields.title, 'title');
                 if( nv != this.edit.fieldValue('info', 'title') && nv == '' ) {
-                    alert('You must specifiy a title');
+                    M.alert('You must specifiy a title');
                     return false;
                 }
                 M.api.postJSONFormData('ciniki.writingcatalog.itemUpdate', 
@@ -633,7 +633,7 @@ function ciniki_writingcatalog_main() {
             var c = this.edit.serializeFormData('yes');
             var nv = this.edit.formFieldValue(this.edit.sections.info.fields.title, 'title');
             if( nv == '' ) {
-                alert('You must specifiy a title');
+                M.alert('You must specifiy a title');
                 return false;
             }
             M.api.postJSONFormData('ciniki.writingcatalog.itemAdd', {'tnid':M.curTenantID}, c, function(rsp) {
@@ -648,15 +648,15 @@ function ciniki_writingcatalog_main() {
     };
 
     this.itemDelete = function() {
-        if( confirm('Are you sure you want to delete \'' + this.item.data.title + '\'?  All information will be removed. There is no way to get the information back once deleted.') ) {
-            var rsp = M.api.getJSONCb('ciniki.writingcatalog.itemDelete', {'tnid':M.curTenantID, 'writingcatalog_id':this.item.writingcatalog_id}, function(rsp) {
+        M.confirm('Are you sure you want to delete \'' + this.item.data.title + '\'?  All information will be removed. There is no way to get the information back once deleted.',null,function() {
+            var rsp = M.api.getJSONCb('ciniki.writingcatalog.itemDelete', {'tnid':M.curTenantID, 'writingcatalog_id':M.ciniki_writingcatalog_main.item.writingcatalog_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_writingcatalog_main.item.close();
             });
-        }
+        });
     };
 
     this.contentEdit = function(cb, cid, ctype, wid) {
@@ -710,15 +710,15 @@ function ciniki_writingcatalog_main() {
     };
 
     this.contentDelete = function() {
-        if( confirm('Are you sure you want to delete this content?') ) {
-            var rsp = M.api.getJSONCb('ciniki.writingcatalog.contentDelete', {'tnid':M.curTenantID, 'content_id':this.content.content_id}, function(rsp) {
+        M.confirm('Are you sure you want to delete this content?',null,function() {
+            var rsp = M.api.getJSONCb('ciniki.writingcatalog.contentDelete', {'tnid':M.curTenantID, 'content_id':M.ciniki_writingcatalog_main.content.content_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_writingcatalog_main.content.close();
             });
-        }
+        });
     };
 
 }
