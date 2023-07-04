@@ -159,7 +159,7 @@ function ciniki_writingcatalog_main() {
                 },
             '_buttons':{'label':'', 'buttons':{
                 'edit':{'label':'Edit', 'fn':'M.ciniki_writingcatalog_main.itemEdit(\'M.ciniki_writingcatalog_main.itemShow();\',M.ciniki_writingcatalog_main.item.writingcatalog_id);'},
-                'delete':{'label':'Delete', 'fn':'M.ciniki_writingcatalog_main.deletePiece();'},
+                'delete':{'label':'Delete', 'fn':'M.ciniki_writingcatalog_main.itemDelete();'},
             }},
         };
         this.item.sectionData = function(s) {
