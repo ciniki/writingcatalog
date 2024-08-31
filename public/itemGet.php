@@ -59,8 +59,6 @@ function ciniki_writingcatalog_itemGet($ciniki) {
         return $rc;
     }
     $intl_timezone = $rc['settings']['intl-default-timezone'];
-    $intl_currency_fmt = numfmt_create($rc['settings']['intl-default-locale'], NumberFormatter::CURRENCY);
-    $intl_currency = $rc['settings']['intl-default-currency'];
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQuote');
     ciniki_core_loadMethod($ciniki, 'ciniki', 'users', 'private', 'datetimeFormat');
@@ -227,48 +225,7 @@ function ciniki_writingcatalog_itemGet($ciniki) {
         }
     }
 
-    //
-    // Get the product list if requested
-    //
-//  if( isset($args['products']) && $args['products'] == 'yes' 
-//      && ($ciniki['tenant']['modules']['ciniki.writingcatalog']['flags']&0x02) > 0
-//      ) {
-//      $strsql = "SELECT id, name, inventory, price "
-//          . "FROM ciniki_writingcatalog_products "
-//          . "WHERE writingcatalog_id = '" . ciniki_core_dbQuote($ciniki, $args['writingcatalog_id']) . "' "
-//          . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
-//          . "ORDER BY ciniki_writingcatalog_products.name "
-//          . "";
-//      $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.writingcatalog', array(
-//          array('container'=>'products', 'fname'=>'id', 'name'=>'product',
-//              'fields'=>array('id', 'name', 'inventory', 'price')),
-//          ));
-//      if( $rc['stat'] != 'ok' ) { 
-//          return $rc;
-//      }
-//      if( isset($rc['products']) ) {
-//          $item['products'] = $rc['products'];
-//          foreach($item['products'] as $pid => $product) {
-//              $item['products'][$pid]['product']['price'] = numfmt_format_currency($intl_currency_fmt, $product['product']['price'], $intl_currency);
-//          }
-//      }
-//  }
-
     $rsp = array('stat'=>'ok', 'item'=>$item);
-
-    //
-    // Get any invoices for this piece of writing
-    //
-//  if( isset($args['invoices']) && $args['invoices'] == 'yes' && isset($modules['ciniki.sapos']) ) {
-//      ciniki_core_loadMethod($ciniki, 'ciniki', 'sapos', 'private', 'objectInvoices');
-//      $rc = ciniki_sapos_objectInvoices($ciniki, $args['tnid'], 'ciniki.writingcatalog.item', $args['writingcatalog_id']);
-//      if( $rc['stat'] != 'ok' ) {
-//          return $rc;
-//      }
-//      if( isset($rc['invoices']) ) {
-//          $item['invoices'] = $rc['invoices'];
-//      }
-//  }
 
     //
     // Check if all tags should be returned
